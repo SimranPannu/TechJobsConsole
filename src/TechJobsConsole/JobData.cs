@@ -2,6 +2,8 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Linq;
+using System;
 
 namespace TechJobsConsole
 {
@@ -38,6 +40,34 @@ namespace TechJobsConsole
             return values;
         }
 
+        //In the JobData class, create a new (public static) method called FindByValue that will search for a string within each of the columns.
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+
+            // load data, if not already loaded
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            //change to lower to avoid duplicate listing
+            value = value.ToLower();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                foreach (KeyValuePair<string, string> column in row)
+                {
+                    if ((column.Value).ToLower().Contains(value))
+                    {
+                        if (!jobs.Contains(row))
+                            jobs.Add(row);
+
+                    }
+                }
+
+            }
+            return jobs;
+        }
+
+
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
@@ -48,6 +78,8 @@ namespace TechJobsConsole
             foreach (Dictionary<string, string> row in AllJobs)
             {
                 string aValue = row[column];
+                aValue = aValue.ToLower(); //change to loewr case 
+
 
                 if (aValue.Contains(value))
                 {
